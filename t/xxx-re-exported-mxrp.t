@@ -6,12 +6,19 @@ use Test::More;
 my @calls;
 
 BEGIN {
+
     package MyMXRP;
     use MooseX::Role::Parameterized;
     use Moose::Exporter;
 
     Moose::Exporter->setup_import_methods(
         also => 'MooseX::Role::Parameterized', );
+
+    # Hack around a known Moose::Exporter bug
+    sub init_meta {
+        my $self = shift;
+        return MooseX::Role::Parameterized->init_meta(@_);
+    }
 
 }
 
